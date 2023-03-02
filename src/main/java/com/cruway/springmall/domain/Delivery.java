@@ -1,5 +1,6 @@
 package com.cruway.springmall.domain;
 
+import com.cruway.springmall.domain.embeded.Address;
 import com.cruway.springmall.domain.status.DeliveryStatus;
 import lombok.Getter;
 import lombok.Setter;

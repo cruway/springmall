@@ -1,4 +1,4 @@
-package com.cruway.springmall.domain;
+package com.cruway.springmall.domain.embeded;
 
 import lombok.Getter;
 
