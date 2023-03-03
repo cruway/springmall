@@ -29,4 +29,33 @@ public class OrderItem {
 
     // 注文数量
     private int count;
+
+    // 生成method
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    // ビジニスロジック
+    /**
+     * 注文キャンセル
+     */
+    public void cancel() {
+        getItem().addStock(count);
+    }
+
+    // 照会ロジック
+
+    /**
+     * 注文商品全体価格照会
+     * @return
+     */
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
+    }
 }
