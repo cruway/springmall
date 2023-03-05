@@ -1,10 +1,14 @@
 package com.cruway.springmall.repository;
 
 import com.cruway.springmall.domain.Order;
+import com.cruway.springmall.domain.OrderSearch;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -21,5 +25,41 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
-    // public List<Order> findAll(OrderSearch orderSearch) {}
+    public List<Order> findAll(OrderSearch orderSearch) {
+        String jpql = "select o from Order o join o.member m";
+        boolean isFirstCondition = true;
+
+        //注文状態検索
+        if(orderSearch.getOrderStatus() != null) {
+            if(isFirstCondition) {
+                jpql += " where";
+                isFirstCondition = false;
+            } else {
+                jpql += " and";
+            }
+            jpql += " o.status = :status";
+        }
+
+        //会員名検索
+        if(StringUtils.hasText(orderSearch.getMemberName())) {
+            if(isFirstCondition) {
+                jpql += " where";
+                isFirstCondition = false;
+            } else {
+                jpql += " and";
+            }
+            jpql += " o.status = :status";
+        }
+       TypedQuery<Order> query = em.createQuery(jpql, Order.class)
+                .setMaxResults(1000); // 最大1000件
+
+        if(orderSearch.getOrderStatus() != null) {
+            query = query.setParameter("status", orderSearch.getOrderStatus());
+        }
+        if(StringUtils.hasText(orderSearch.getMemberName())) {
+            query = query.setParameter("name", orderSearch.getMemberName());
+        }
+
+        return query.getResultList();
+    }
 }
