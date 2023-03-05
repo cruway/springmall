@@ -30,14 +30,16 @@ repositories {
 dependencies {
     implementation 'org.webjars:bootstrap:5.2.3'
     implementation 'org.webjars:jquery:3.6.3'
-    implementation 'org.springframework.boot:spring-boot-starter-mustache'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 
     // Querydsl追加
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-core:${queryDslVersion}"
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
@@ -50,7 +52,7 @@ test {
 }
 
 // querydsl追加
-def querydslDir = "src/main/generated/querydsl"
+def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
     jpa = true
@@ -61,10 +63,14 @@ sourceSets {
     main.java.srcDir querydslDir
 }
 
-configurations {
-    querydsl.extendsFrom compileClasspath
-}
 
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
 }

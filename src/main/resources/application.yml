@@ -13,12 +13,10 @@ spring:
         #show_sql: true
         format_sql: true
 
-  mustache:
-    # テンプレートのエンコード (デフォルト値: UTF-8)
-    charset: UTF-8
-    # テンプレート名に適用するプレフィックス (デフォルト値: classpath:/templates/)
+  thymeleaf:
+    cache: false
+    check-template-location: true
     prefix: classpath:/templates/
-    # テンプレート名に適用するサフィックス (デフォルト値: .mustache)
     suffix: .html
 
 logging:
