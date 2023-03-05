@@ -2,20 +2,28 @@ package com.cruway.springmall.repository;
 
 import com.cruway.springmall.domain.Order;
 import com.cruway.springmall.domain.OrderSearch;
+import com.cruway.springmall.domain.status.OrderStatus;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.cruway.springmall.domain.QMember.member;
+import static com.cruway.springmall.domain.QOrder.*;
 
 @Repository
 @RequiredArgsConstructor
 public class OrderRepository {
 
     private final EntityManager em;
+    private final JPAQueryFactory query;
 
     public void save(Order order) {
         em.persist(order);
@@ -25,13 +33,20 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
-    public List<Order> findAll(OrderSearch orderSearch) {
+    /**
+     * JPQL（おすすめしない）
+     *
+     * @param orderSearch
+     * @return
+     */
+    @Deprecated
+    public List<Order> findAllByJpql(OrderSearch orderSearch) {
         String jpql = "select o from Order o join o.member m";
         boolean isFirstCondition = true;
 
         //注文状態検索
-        if(orderSearch.getOrderStatus() != null) {
-            if(isFirstCondition) {
+        if (orderSearch.getOrderStatus() != null) {
+            if (isFirstCondition) {
                 jpql += " where";
                 isFirstCondition = false;
             } else {
@@ -41,25 +56,87 @@ public class OrderRepository {
         }
 
         //会員名検索
-        if(StringUtils.hasText(orderSearch.getMemberName())) {
-            if(isFirstCondition) {
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            if (isFirstCondition) {
                 jpql += " where";
                 isFirstCondition = false;
             } else {
                 jpql += " and";
             }
-            jpql += " o.status = :status";
+            jpql += " m.name like :name";
         }
-       TypedQuery<Order> query = em.createQuery(jpql, Order.class)
+        TypedQuery<Order> query = em.createQuery(jpql, Order.class)
                 .setMaxResults(1000); // 最大1000件
 
-        if(orderSearch.getOrderStatus() != null) {
+        if (orderSearch.getOrderStatus() != null) {
             query = query.setParameter("status", orderSearch.getOrderStatus());
         }
-        if(StringUtils.hasText(orderSearch.getMemberName())) {
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
             query = query.setParameter("name", orderSearch.getMemberName());
         }
 
         return query.getResultList();
+    }
+
+    /**
+     * JPA Criteria（おすすめしない）
+     * 維持補修zero(SQLが予測つかない)
+     *
+     * @param orderSearch
+     * @return
+     */
+    @Deprecated
+    public List<Order> findAllByCriteria(OrderSearch orderSearch) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Order> cq = cb.createQuery(Order.class);
+        Root<Order> o = cq.from(Order.class);
+        Join<Object, Object> m = o.join("member", JoinType.INNER);
+
+        List<Predicate> criteria = new ArrayList<>();
+
+        // 注文状態検索
+        if (orderSearch.getOrderStatus() != null) {
+            Predicate status = cb.equal(o.get("status"), orderSearch.getOrderStatus());
+            criteria.add(status);
+        }
+
+        // 会員名検索
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            Predicate name = cb.like(m.get("name"), "%" + orderSearch.getMemberName() + "%");
+            criteria.add(name);
+        }
+
+        cq.where(cb.and(criteria.toArray(new Predicate[criteria.size()])));
+        TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000);
+        return query.getResultList();
+    }
+
+    /**
+     * QueryDSL（おすすめ）
+     *
+     * @param orderSearch
+     * @return
+     */
+    public List<Order> findAllByQueryDSL(OrderSearch orderSearch) {
+        return query.select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
+                .limit(1000)
+                .fetch();
+    }
+
+    private BooleanExpression nameLike(String memberName) {
+        if(StringUtils.hasText(memberName)) {
+            return null;
+        }
+        return member.name.like(memberName);
+    }
+
+    private BooleanExpression statusEq(OrderStatus statusCond) {
+        if(statusCond == null) {
+            return null;
+        }
+        return order.status.eq(statusCond);
     }
 }
