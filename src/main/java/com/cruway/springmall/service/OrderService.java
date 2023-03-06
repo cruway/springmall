@@ -1,9 +1,6 @@
 package com.cruway.springmall.service;
 
-import com.cruway.springmall.domain.Delivery;
-import com.cruway.springmall.domain.Member;
-import com.cruway.springmall.domain.Order;
-import com.cruway.springmall.domain.OrderItem;
+import com.cruway.springmall.domain.*;
 import com.cruway.springmall.domain.item.Item;
 import com.cruway.springmall.repository.ItemRepository;
 import com.cruway.springmall.repository.MemberRepository;
@@ -11,6 +8,8 @@ import com.cruway.springmall.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -58,8 +57,12 @@ public class OrderService {
         order.cancel();
     }
 
-    // 検索
-    /*public List<Order> findOrders(OrderSearch orderSearch) {
-        return orderRepository.findAll(orderSearch);
-    }*/
+    /**
+     * 検索
+     * @param orderSearch
+     * @return
+     */
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAllByJpql(orderSearch);
+    }
 }

@@ -1,4 +1,4 @@
-package com.cruway.springmall.controller;
+package com.cruway.springmall.controller.form;
 
 import lombok.Getter;
 import lombok.Setter;

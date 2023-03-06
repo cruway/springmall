@@ -43,7 +43,6 @@ public class OrderRepository {
      * @param orderSearch
      * @return
      */
-    @Deprecated
     public List<Order> findAllByJpql(OrderSearch orderSearch) {
         String jpql = "select o from Order o join o.member m";
         boolean isFirstCondition = true;
@@ -115,6 +114,7 @@ public class OrderRepository {
         return query.getResultList();
     }
 
+    @Deprecated
     /**
      * QueryDSL（おすすめ）
      *
