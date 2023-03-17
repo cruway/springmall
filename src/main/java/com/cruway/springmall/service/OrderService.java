@@ -31,8 +31,9 @@ public class OrderService {
         Item item = itemRepository.fineOne(itemId);
 
         // 配送情報生成
-        Delivery delivery = new Delivery();
-        delivery.setAddress(member.getAddress());
+        Delivery delivery = Delivery.builder()
+                .address(member.getHomeAddress())
+                .build();
 
         // 注文商品生成
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);

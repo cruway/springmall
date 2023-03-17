@@ -1,44 +1,51 @@
 package com.cruway.springmall.domain;
 
 import com.cruway.springmall.domain.item.Item;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.*;
 
-@Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class OrderItem {
 
-    @Id @GeneratedValue
-    @Column(name = "order_item_id")
+    @Id
+    @Column(name = "order_item_id", nullable = false)
+    @GeneratedValue
     private Long id;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "item_id")
-    private Item item;
-
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
-
-    // 注文価格
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    private Item item;
     private int orderPrice;
-
-    // 注文数量
     private int count;
+
+    @Builder
+    public OrderItem(Long id, Order order, Item item, int orderPrice, int count) {
+        this.id = id;
+        this.setOrder(order);
+        this.item = item;
+        this.orderPrice = orderPrice;
+        this.count = count;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+        //order.addOrderItem(this);
+    }
 
     // 生成method
     public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
-        OrderItem orderItem = new OrderItem();
-        orderItem.setItem(item);
-        orderItem.setOrderPrice(orderPrice);
-        orderItem.setCount(count);
+        OrderItem orderItem = OrderItem.builder()
+                .item(item)
+                .orderPrice(orderPrice)
+                .count(count)
+                .build();
 
         item.removeStock(count);
         return orderItem;

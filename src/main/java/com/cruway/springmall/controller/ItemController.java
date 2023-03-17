@@ -29,12 +29,13 @@ public class ItemController {
     @PostMapping("/items/new")
     public String create(BookForm form) {
 
-        Book book = new Book();
-        book.setName(form.getName());
-        book.setPrice(form.getPrice());
-        book.setStockQuantity(form.getStockQuantity());
-        book.setAuthor(form.getAuthor());
-        book.setIsbn(form.getIsbn());
+        Book book = Book.bookBuilder()
+                .name(form.getName())
+                .price(form.getPrice())
+                .stockQuantity(form.getStockQuantity())
+                .author(form.getAuthor())
+                .isbn(form.getIsbn())
+                .build();
 
         itemService.saveItem(book);
         return "redirect:/";

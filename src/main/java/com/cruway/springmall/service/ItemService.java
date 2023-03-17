@@ -24,9 +24,7 @@ public class ItemService {
     @Transactional
     public void updateItem(Long itemId, String name, int price, int stockQuantity) {
         Item findItem = itemRepository.fineOne(itemId);
-        findItem.setName(name);
-        findItem.setPrice(price);
-        findItem.setStockQuantity(stockQuantity);
+        findItem.update(name, price, stockQuantity);
     }
 
     public List<Item> findItems() {

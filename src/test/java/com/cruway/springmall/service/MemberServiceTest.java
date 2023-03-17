@@ -26,8 +26,9 @@ class MemberServiceTest {
     // @Rollback(false)
     public void 会員登録() throws Exception {
         // given
-        Member member = new Member();
-        member.setName("kim");
+        Member member = Member.builder()
+                .name("kim")
+                .build();
 
         // when
         Long savedId = memberService.join(member);
@@ -40,11 +41,13 @@ class MemberServiceTest {
     @Test
     public void 重複会員例外() throws Exception {
         // given
-        Member member1 = new Member();
-        member1.setName("kim");
+        Member member1 = Member.builder()
+                .name("kim")
+                .build();
 
-        Member member2 = new Member();
-        member2.setName("kim");
+        Member member2 = Member.builder()
+                .name("kim")
+                .build();
 
         // when
         memberService.join(member1);
