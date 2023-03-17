@@ -5,8 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-import static javax.persistence.FetchType.*;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity

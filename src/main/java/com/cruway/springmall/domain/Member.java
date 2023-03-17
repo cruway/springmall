@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class Member {
     @Column(name = "member_id", nullable = false)
     private Long id;
 
-    private String name;
+    @NotEmpty
+    private String userName;
 
     @Embedded
     @AttributeOverrides({
@@ -37,9 +39,9 @@ public class Member {
     private List<Order> orders;
 
     @Builder
-    public Member(Long id, String name, Address homeAddress) {
+    public Member(Long id, String userName, Address homeAddress) {
         this.id = id;
-        this.name = name;
+        this.userName = userName;
         this.homeAddress = homeAddress;
         this.orders = new ArrayList<>();
     }

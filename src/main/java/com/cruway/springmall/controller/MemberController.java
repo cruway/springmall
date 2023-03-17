@@ -34,7 +34,7 @@ public class MemberController {
         Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
 
         Member member = Member.builder()
-                .name(form.getName())
+                .userName(form.getName())
                 .homeAddress(address)
                 .build();
 
