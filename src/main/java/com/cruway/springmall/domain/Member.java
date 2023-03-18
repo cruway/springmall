@@ -1,10 +1,7 @@
 package com.cruway.springmall.domain;
 
 import com.cruway.springmall.domain.embeded.Address;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -22,6 +19,7 @@ public class Member {
     private Long id;
 
     @NotEmpty
+    @Setter
     private String userName;
 
     @Embedded

@@ -18,6 +18,7 @@ public class Delivery {
     private Long id;
 
     @OneToOne(mappedBy = "delivery", fetch = LAZY)
+    @Setter
     private Order order;
 
     @Embedded
@@ -30,12 +31,8 @@ public class Delivery {
     @Builder
     public Delivery(Long id, Order order, Address address, DeliveryStatus status) {
         this.id = id;
-        this.setOrder(order);
+        this.order = order;
         this.address = address;
         this.status = status;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 }
