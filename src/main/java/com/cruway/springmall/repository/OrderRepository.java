@@ -134,7 +134,7 @@ public class OrderRepository {
         if(StringUtils.hasText(memberName)) {
             return null;
         }
-        return member.name.like(memberName);
+        return member.userName.like(memberName);
     }
 
     private BooleanExpression statusEq(OrderStatus statusCond) {

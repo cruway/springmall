@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -27,7 +29,7 @@ class MemberServiceTest {
     public void 会員登録() throws Exception {
         // given
         Member member = Member.builder()
-                .name("kim")
+                .userName("kim")
                 .build();
 
         // when
@@ -42,11 +44,11 @@ class MemberServiceTest {
     public void 重複会員例外() throws Exception {
         // given
         Member member1 = Member.builder()
-                .name("kim")
+                .userName("kim")
                 .build();
 
         Member member2 = Member.builder()
-                .name("kim")
+                .userName("kim")
                 .build();
 
         // when
@@ -57,5 +59,17 @@ class MemberServiceTest {
 
         // then
         assertEquals("すでに存在している会員です", ex.getMessage());
+    }
+    
+    @Test
+    public void 全ての会員照会() throws Exception {
+        //given
+
+        //when
+        List<Member> members = memberService.findMembers();
+        System.out.println("members = " + members);
+        
+
+        //then
     }
 }

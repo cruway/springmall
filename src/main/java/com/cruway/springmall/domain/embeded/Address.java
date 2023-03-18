@@ -17,7 +17,7 @@ public class Address {
     private String city;
     @Column(length = 20)
     private String street;
-    @Column(length = 5)
+    @Column(length = 7)
     private String zipcode;
 
     @Builder

@@ -1,6 +1,7 @@
 package com.cruway.springmall.domain;
 
 import com.cruway.springmall.domain.embeded.Address;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,6 +34,7 @@ public class Member {
     })
     private Address homeAddress;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Order> orders;
 

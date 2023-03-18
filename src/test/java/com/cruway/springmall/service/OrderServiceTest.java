@@ -90,7 +90,7 @@ class OrderServiceTest {
 
     private Member createMember() {
         Member member = Member.builder()
-                .name("会員１")
+                .userName("会員１")
                 .homeAddress(Address.builder()
                         .city("東京")
                         .street("板橋区")
