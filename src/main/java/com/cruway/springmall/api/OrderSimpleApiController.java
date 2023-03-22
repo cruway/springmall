@@ -5,6 +5,7 @@ import com.cruway.springmall.domain.OrderSearch;
 import com.cruway.springmall.domain.embeded.Address;
 import com.cruway.springmall.domain.status.OrderStatus;
 import com.cruway.springmall.repository.OrderRepository;
+import com.cruway.springmall.repository.OrderSimpleQueryDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -39,37 +39,42 @@ public class OrderSimpleApiController {
     }
 
     @GetMapping("/api/v2/simple-orders")
-    public List<SimpleOrderDto> ordersV2() {
+    public List<SimpleQueryDto> ordersV2() {
         // ORDER 2個
         // N + 1 -> 1 + 会員 N + 配送 N
         return orderRepository.findAllByJpql(OrderSearch.builder().build())
                 .stream()
-                .map(SimpleOrderDto::new)
+                .map(SimpleQueryDto::new)
                 .collect(toList());
     }
 
     @GetMapping("/api/v3/simple-orders")
-    public List<SimpleOrderDto> ordersV3() {
+    public List<SimpleQueryDto> ordersV3() {
         return orderRepository.findAllWithMemberDelivery()
                 .stream()
-                .map(SimpleOrderDto::new)
+                .map(SimpleQueryDto::new)
                 .collect(toList());
     }
 
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> ordersV4() {
+        return orderRepository.findOrderDtos();
+    }
+
     @Data
-    static class SimpleOrderDto {
+    static class SimpleQueryDto {
         private Long orderId;
         private String name;
         private LocalDateTime orderDate;
         private OrderStatus orderStatus;
         private Address address;
 
-        public SimpleOrderDto(Order order) {
-            orderId = order.getId();
-            name = order.getMember().getUserName(); // Lazy 強制初期化
-            orderDate = order.getOrderDate();
-            orderStatus = order.getStatus();
-            address = order.getDelivery().getAddress(); // Lazy 強制初期化
+        public SimpleQueryDto(Order order) {
+            this.orderId = order.getId();
+            this.name = order.getMember().getUserName();
+            this.orderDate = order.getOrderDate();
+            this.orderStatus = order.getStatus();
+            this.address = order.getDelivery().getAddress();
         }
     }
 }

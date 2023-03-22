@@ -2,16 +2,18 @@ package com.cruway.springmall.repository;
 
 import com.cruway.springmall.domain.Order;
 import com.cruway.springmall.domain.OrderSearch;
+import com.cruway.springmall.domain.embeded.Address;
 import com.cruway.springmall.domain.status.OrderStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,14 +133,14 @@ public class OrderRepository {
     }
 
     private BooleanExpression nameLike(String memberName) {
-        if(StringUtils.hasText(memberName)) {
+        if (StringUtils.hasText(memberName)) {
             return null;
         }
         return member.userName.like(memberName);
     }
 
     private BooleanExpression statusEq(OrderStatus statusCond) {
-        if(statusCond == null) {
+        if (statusCond == null) {
             return null;
         }
         return order.status.eq(statusCond);
@@ -149,6 +151,15 @@ public class OrderRepository {
                 "select o from Order o" +
                         " join fetch o.member m" +
                         " join fetch o.delivery d", Order.class
+        ).getResultList();
+    }
+
+    public List<OrderSimpleQueryDto> findOrderDtos() {
+        return  em.createQuery(
+                "select new com.cruway.springmall.repository.OrderSimpleQueryDto(o.id, m.userName, o.orderDate, o.status, d.address) " +
+                        "from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d", OrderSimpleQueryDto.class
         ).getResultList();
     }
 }
