@@ -40,7 +40,18 @@ public class OrderSimpleApiController {
 
     @GetMapping("/api/v2/simple-orders")
     public List<SimpleOrderDto> ordersV2() {
-        return orderRepository.findAllByJpql(OrderSearch.builder().build()).stream()
+        // ORDER 2個
+        // N + 1 -> 1 + 会員 N + 配送 N
+        return orderRepository.findAllByJpql(OrderSearch.builder().build())
+                .stream()
+                .map(SimpleOrderDto::new)
+                .collect(toList());
+    }
+
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3() {
+        return orderRepository.findAllWithMemberDelivery()
+                .stream()
                 .map(SimpleOrderDto::new)
                 .collect(toList());
     }
