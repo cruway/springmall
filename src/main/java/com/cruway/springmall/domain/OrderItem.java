@@ -1,6 +1,7 @@
 package com.cruway.springmall.domain;
 
 import com.cruway.springmall.domain.item.Item;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ public class OrderItem {
     @Column(name = "order_item_id", nullable = false)
     @GeneratedValue
     private Long id;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;

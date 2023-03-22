@@ -2,6 +2,7 @@ package com.cruway.springmall.domain;
 
 import com.cruway.springmall.domain.embeded.Address;
 import com.cruway.springmall.domain.status.DeliveryStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,10 +14,12 @@ import static javax.persistence.FetchType.*;
 @Entity
 public class Delivery {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "delivery_id")
     private Long id;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "delivery", fetch = LAZY)
     @Setter
     private Order order;

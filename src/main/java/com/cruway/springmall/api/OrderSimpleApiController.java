@@ -23,7 +23,7 @@ public class OrderSimpleApiController {
 
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() {
-        List<Order> all = orderRepository.findAllByJpql(new OrderSearch());
+        List<Order> all = orderRepository.findAllByJpql(OrderSearch.builder().build());
         return all;
     }
  }
