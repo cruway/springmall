@@ -146,6 +146,7 @@ public class OrderRepository {
         return order.status.eq(statusCond);
     }
 
+    // 簡単に作れる
     public List<Order> findAllWithMemberDelivery() {
         return em.createQuery(
                 "select o from Order o" +
@@ -154,6 +155,7 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    // 性能的に良いがほぼ差がない、できればfetch joinを使う
     public List<OrderSimpleQueryDto> findOrderDtos() {
         return  em.createQuery(
                 "select new com.cruway.springmall.repository.OrderSimpleQueryDto(o.id, m.userName, o.orderDate, o.status, d.address) " +
