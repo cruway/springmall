@@ -5,7 +5,8 @@ import com.cruway.springmall.domain.OrderSearch;
 import com.cruway.springmall.domain.embeded.Address;
 import com.cruway.springmall.domain.status.OrderStatus;
 import com.cruway.springmall.repository.OrderRepository;
-import com.cruway.springmall.repository.OrderSimpleQueryDto;
+import com.cruway.springmall.repository.order.simplequery.OrderSimpleQueryDto;
+import com.cruway.springmall.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ import static java.util.stream.Collectors.*;
 public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() {
@@ -58,7 +60,7 @@ public class OrderSimpleApiController {
 
     @GetMapping("/api/v4/simple-orders")
     public List<OrderSimpleQueryDto> ordersV4() {
-        return orderRepository.findOrderDtos();
+        return orderSimpleQueryRepository.findOrderDtos();
     }
 
     @Data

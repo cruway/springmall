@@ -1,4 +1,4 @@
-package com.cruway.springmall.repository;
+package com.cruway.springmall.repository.order.simplequery;
 
 import com.cruway.springmall.domain.embeded.Address;
 import com.cruway.springmall.domain.status.OrderStatus;

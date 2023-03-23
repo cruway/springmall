@@ -1,6 +1,5 @@
 package com.cruway.springmall.service;
 
-import com.cruway.springmall.domain.item.Book;
 import com.cruway.springmall.domain.item.Item;
 import com.cruway.springmall.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;

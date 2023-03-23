@@ -3,7 +3,6 @@ package com.cruway.springmall.domain;
 import com.cruway.springmall.domain.status.OrderStatus;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class OrderSearch {
