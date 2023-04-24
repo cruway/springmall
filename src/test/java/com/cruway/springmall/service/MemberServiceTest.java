@@ -2,16 +2,17 @@ package com.cruway.springmall.service;
 
 import com.cruway.springmall.domain.Member;
 import com.cruway.springmall.repository.MemberRepository;
+import com.cruway.springmall.repository.MemberTestRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -21,9 +22,19 @@ class MemberServiceTest {
     MemberService memberService;
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    MemberTestRepository memberTestRepository;
     @Autowired
     EntityManager em;
 
+    @Test
+    void testList() {
+        for (Member member : memberTestRepository.getList()) {
+            System.out.println(member);
+        }
+
+    }
     @Test
     // @Rollback(false)
     public void 会員登録() throws Exception {
