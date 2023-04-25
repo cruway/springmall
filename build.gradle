@@ -30,15 +30,12 @@ dependencies {
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 
     // Querydsl追加
+    //implementation 'com.querydsl:querydsl-core'
     implementation 'com.querydsl:querydsl-jpa'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
-
-    implementation 'com.blazebit:blaze-persistence-core-api:1.6.8'
-    runtimeOnly 'com.blazebit:blaze-persistence-core-impl:1.6.8'
-    implementation 'com.blazebit:blaze-persistence-integration-querydsl-expressions:1.6.8'
-    //testImplementation 'com.blazebit:blaze-persistence-integration-hibernate-5.4:1.6.8'
+    //implementation 'org.qlrm:qlrm:4.0.1'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'

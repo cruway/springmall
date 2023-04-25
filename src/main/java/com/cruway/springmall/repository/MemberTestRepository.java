@@ -8,5 +8,4 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 // Querydslに依存する
 // 実務環境では限界がある
 public interface MemberTestRepository extends JpaRepository<Member, Long>, MemberTestRepositoryQuery, QuerydslPredicateExecutor<Member> {
-
 }

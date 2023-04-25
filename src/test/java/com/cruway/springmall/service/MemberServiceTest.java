@@ -1,5 +1,6 @@
 package com.cruway.springmall.service;
 
+import com.cruway.springmall.controller.form.MemberDto;
 import com.cruway.springmall.domain.Member;
 import com.cruway.springmall.repository.MemberRepository;
 import com.cruway.springmall.repository.MemberTestRepository;
@@ -30,7 +31,7 @@ class MemberServiceTest {
 
     @Test
     void testList() {
-        for (Member member : memberTestRepository.getList()) {
+        for (MemberDto member : memberTestRepository.getList()) {
             System.out.println(member);
         }
 
