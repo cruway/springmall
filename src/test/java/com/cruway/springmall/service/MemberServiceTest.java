@@ -32,7 +32,7 @@ class MemberServiceTest {
     @Test
     void testList() {
         for (MemberDto member : memberTestRepository.getList()) {
-            System.out.println(member);
+            System.out.println(member.getUserName());
         }
 
     }
